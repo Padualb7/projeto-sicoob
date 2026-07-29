@@ -1,0 +1,262 @@
+<section class="painel-filtros">
+  <button
+    type="button"
+    class="painel-filtros__cabecalho"
+    (click)="toggle()"
+    [attr.aria-expanded]="expandido"
+  >
+    <span>Filtros</span>
+
+    <span
+      class="painel-filtros__seta"
+      [class.painel-filtros__seta--aberta]="expandido"
+      aria-hidden="true"
+    >
+      ▾
+    </span>
+  </button>
+
+  @if (expandido) {
+    <div class="painel-filtros__conteudo">
+      <h2 class="painel-filtros__titulo">
+        PESQUISAR LOTE OUTROS CRÉDITOS/DÉBITOS
+      </h2>
+
+      <form
+        class="formulario-filtros"
+        [formGroup]="formulario"
+        (ngSubmit)="onPesquisar()"
+      >
+        <div class="formulario-filtros__coluna-esquerda">
+          <div class="campo">
+            <label
+              class="campo__label"
+              for="instituicaoResponsavel"
+            >
+              Instituição Resp.
+            </label>
+
+            <input
+              id="instituicaoResponsavel"
+              class="campo__controle"
+              type="text"
+              formControlName="instituicaoResponsavel"
+            />
+          </div>
+
+          <div class="campo">
+            <label
+              class="campo__label"
+              for="instituicao"
+            >
+              Instituição
+            </label>
+
+            <input
+              id="instituicao"
+              class="campo__controle"
+              type="text"
+              formControlName="instituicao"
+            />
+          </div>
+
+          <div class="campo">
+            <label
+              class="campo__label"
+              for="situacao"
+            >
+              Situação Lote
+            </label>
+
+            <select
+              id="situacao"
+              class="campo__controle campo__controle--select"
+              formControlName="situacao"
+            >
+              @for (
+                situacao of situacoes;
+                track situacao.label
+              ) {
+                <option [ngValue]="situacao.value">
+                  {{ situacao.label }}
+                </option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="formulario-filtros__coluna-direita">
+          <div class="campo-faixa">
+            <span class="campo-faixa__titulo">
+              ID Lote
+            </span>
+
+            <div class="campo-faixa__controles">
+              <div class="campo-faixa__item">
+                <label
+                  class="campo-faixa__label"
+                  for="idInicial"
+                >
+                  De
+                </label>
+
+                <input
+                  id="idInicial"
+                  class="campo__controle"
+                  type="number"
+                  min="0"
+                  formControlName="idInicial"
+                />
+              </div>
+
+              <div class="campo-faixa__item">
+                <label
+                  class="campo-faixa__label"
+                  for="idFinal"
+                >
+                  Até
+                </label>
+
+                <input
+                  id="idFinal"
+                  class="campo__controle"
+                  type="number"
+                  min="0"
+                  formControlName="idFinal"
+                />
+              </div>
+            </div>
+
+            @if (
+              formulario.hasError('intervaloIdInvalido') &&
+              (formulario.touched || formulario.dirty)
+            ) {
+              <p class="mensagem-erro">
+                O ID inicial deve ser menor ou igual ao ID final.
+              </p>
+            }
+          </div>
+
+          <div class="campo-faixa">
+            <span class="campo-faixa__titulo">
+              Valor Lote
+            </span>
+
+            <div class="campo-faixa__controles">
+              <div class="campo-faixa__item">
+                <label
+                  class="campo-faixa__label"
+                  for="valorInicial"
+                >
+                  De
+                </label>
+
+                <input
+                  id="valorInicial"
+                  class="campo__controle"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  formControlName="valorInicial"
+                />
+              </div>
+
+              <div class="campo-faixa__item">
+                <label
+                  class="campo-faixa__label"
+                  for="valorFinal"
+                >
+                  Até
+                </label>
+
+                <input
+                  id="valorFinal"
+                  class="campo__controle"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  formControlName="valorFinal"
+                />
+              </div>
+            </div>
+
+            @if (
+              formulario.hasError('intervaloValorInvalido') &&
+              (formulario.touched || formulario.dirty)
+            ) {
+              <p class="mensagem-erro">
+                O valor inicial deve ser menor ou igual ao valor final.
+              </p>
+            }
+          </div>
+
+          <div class="campo-faixa campo-faixa--data">
+            <span class="campo-faixa__titulo">
+              Data Entrada
+            </span>
+
+            <div class="campo-faixa__controles">
+              <div class="campo-faixa__item">
+                <label
+                  class="campo-faixa__label"
+                  for="dataEntradaInicial"
+                >
+                  De
+                </label>
+
+                <input
+                  id="dataEntradaInicial"
+                  class="campo__controle"
+                  type="date"
+                  formControlName="dataEntradaInicial"
+                />
+              </div>
+
+              <div class="campo-faixa__item">
+                <label
+                  class="campo-faixa__label"
+                  for="dataEntradaFinal"
+                >
+                  Até
+                </label>
+
+                <input
+                  id="dataEntradaFinal"
+                  class="campo__controle"
+                  type="date"
+                  formControlName="dataEntradaFinal"
+                />
+              </div>
+            </div>
+
+            @if (
+              formulario.hasError('intervaloDataInvalido') &&
+              (formulario.touched || formulario.dirty)
+            ) {
+              <p class="mensagem-erro">
+                A data inicial deve ser anterior ou igual à data final.
+              </p>
+            }
+          </div>
+        </div>
+
+        <div class="formulario-filtros__acoes">
+          <button
+            type="button"
+            class="botao botao--secundario"
+            (click)="onLimpar()"
+          >
+            Limpar
+          </button>
+
+          <button
+            type="submit"
+            class="botao botao--primario"
+          >
+            Pesquisar
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+</section>

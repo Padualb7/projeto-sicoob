@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { PainelFiltrosComponent } from "./features/components/painel-filtros/painel-filtros";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [ PainelFiltrosComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
