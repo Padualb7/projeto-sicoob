@@ -1,0 +1,158 @@
+<section class="tabela-lotes">
+  <div class="tabela-lotes__conteudo">
+    <table>
+      <thead>
+        <tr>
+          <th class="coluna-selecao">
+            <input
+              type="checkbox"
+              aria-label="Selecionar todos os lotes"
+              [checked]="todosSelecionados()"
+              [indeterminate]="parcialmenteSelecionados()"
+              (change)="alternarTodos()"
+            />
+          </th>
+
+          <th>ID Lote</th>
+          <th>Data Entrada</th>
+          <th>Valor</th>
+          <th>Quant. Lançamentos</th>
+          <th>Usuário Registro</th>
+          <th>Usuário Aprovação</th>
+          <th>Situação Lote</th>
+          <th>Data/Hora Situação Lote</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (lote of lotes(); track lote.id) {
+          <tr
+            [class.linha-selecionada]="
+              loteEstaSelecionado(lote.id)
+            "
+          >
+            <td class="coluna-selecao">
+              <input
+                type="checkbox"
+                [attr.aria-label]="
+                  'Selecionar lote ' + lote.id
+                "
+                [checked]="
+                  loteEstaSelecionado(lote.id)
+                "
+                (change)="alternarSelecao(lote)"
+              />
+            </td>
+
+            <td>{{ lote.id }}</td>
+
+            <td>
+              {{
+                lote.dataEntrada
+                  | date: 'dd/MM/yyyy' : '' 
+              }}
+            </td>
+
+            <td>
+              {{
+                lote.valor
+                  | currency:
+                    'BRL':
+                    'symbol':
+                    '1.2-2'
+              }}
+            </td>
+
+            <td>
+              {{ lote.quantidadeLancamentos }}
+            </td>
+
+            <td>
+              {{ lote.usuarioRegistro }}
+            </td>
+
+            <td>
+              {{ lote.usuarioAprovacao || '-' }}
+            </td>
+
+            <td>
+              {{ lote.situacao }}
+            </td>
+
+            <td>
+              {{
+                lote.dataHoraSituacao
+                  | date:
+                    'dd/MM/yyyy, HH:mm':
+                    ''
+              }}
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td
+              class="tabela-lotes__vazia"
+              colspan="9"
+            >
+              Nenhum lote encontrado.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (totalPaginas() > 0) {
+    <nav
+      class="paginacao"
+      aria-label="Paginação da tabela de lotes"
+    >
+      <button
+        type="button"
+        class="paginacao__botao"
+        aria-label="Ir para a primeira página"
+        [disabled]="estaNaPrimeiraPagina()"
+        (click)="irParaPrimeiraPagina()"
+      >
+        «
+      </button>
+
+      <button
+        type="button"
+        class="paginacao__botao"
+        aria-label="Ir para a página anterior"
+        [disabled]="estaNaPrimeiraPagina()"
+        (click)="irParaPaginaAnterior()"
+      >
+        ‹
+      </button>
+
+      <span
+        class="paginacao__pagina-atual"
+        aria-current="page"
+      >
+        {{ paginaAtual() }}
+      </span>
+
+      <button
+        type="button"
+        class="paginacao__botao"
+        aria-label="Ir para a próxima página"
+        [disabled]="estaNaUltimaPagina()"
+        (click)="irParaProximaPagina()"
+      >
+        ›
+      </button>
+
+      <button
+        type="button"
+        class="paginacao__botao"
+        aria-label="Ir para a última página"
+        [disabled]="estaNaUltimaPagina()"
+        (click)="irParaUltimaPagina()"
+      >
+        »
+      </button>
+    </nav>
+  }
+</section>

@@ -6,6 +6,11 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
+:root {
+  --cor-primaria: #094747;
+  --cor-secundaria: #0d8f86;
+}
+
 html {
   @include mat.theme((
     color: (

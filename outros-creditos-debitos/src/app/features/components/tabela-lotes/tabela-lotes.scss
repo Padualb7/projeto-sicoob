@@ -1,0 +1,130 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.tabela-lotes {
+  background: #fff;
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.tabela-lotes__conteudo {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+thead {
+  background: var(--cor-primaria);
+}
+
+thead th {
+  padding: 8px 12px;
+
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+
+tbody td {
+  padding: 10px 12px;
+
+  color: #495057;
+  font-size: 11px;
+
+  border-bottom: 1px solid #ececec;
+}
+
+tbody tr {
+  transition: background .15s;
+}
+
+tbody tr:hover {
+  background: #f7f9f9;
+}
+
+.linha-selecionada {
+  background: #eef8f7;
+}
+
+.coluna-selecao {
+  width: 42px;
+  text-align: center;
+}
+
+.coluna-selecao input {
+  cursor: pointer;
+}
+
+.tabela-lotes__vazia {
+  padding: 30px;
+
+  text-align: center;
+  color: #8a8a8a;
+}
+
+.paginacao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+
+  padding: 14px;
+
+  border-top: 1px solid #ececec;
+}
+
+.paginacao__botao {
+  width: 28px;
+  height: 28px;
+
+  border: 1px solid #d5d5d5;
+  border-radius: 50%;
+
+  background: #fff;
+  color: #666;
+
+  cursor: pointer;
+
+  transition: .2s;
+}
+
+.paginacao__botao:hover:not(:disabled) {
+  background: var(--cor-secundaria);
+  border-color: var(--cor-secundaria);
+  color: #fff;
+}
+
+.paginacao__botao:disabled {
+  opacity: .45;
+  cursor: default;
+}
+
+.paginacao__pagina-atual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 30px;
+  height: 30px;
+
+  border-radius: 50%;
+
+  background: var(--cor-secundaria);
+  color: #fff;
+
+  font-size: 12px;
+  font-weight: 600;
+}
