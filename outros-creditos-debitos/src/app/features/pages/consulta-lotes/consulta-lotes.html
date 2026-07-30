@@ -1,0 +1,116 @@
+<!-- Spinner -->
+@if (carregando()) {
+  <div
+    class="loading-overlay"
+    role="status"
+    aria-live="polite"
+    aria-label="Carregando dados"
+  >
+    <div class="loading-overlay__conteudo">
+      <mat-spinner
+        [diameter]="48"
+        [strokeWidth]="4"
+      />
+
+      <span>Carregando...</span>
+    </div>
+  </div>
+}
+<main class="consulta-lotes">
+  <header class="consulta-lotes__cabecalho">
+    <nav
+      class="breadcrumb"
+      aria-label="Navegação estrutural"
+    >
+      <a href="/">Início</a>
+
+      <span aria-hidden="true">›</span>
+
+      <span aria-current="page">
+        Outros Créditos/Débitos
+      </span>
+    </nav>
+
+    <h1>Outros Créditos/Débitos</h1>
+  </header>
+
+  <app-painel-filtros
+    (pesquisar)="onPesquisar($event)"
+    (limpar)="onLimparFiltros()"
+  />
+
+  <section
+  class="barra-acoes"
+  aria-label="Ações dos lotes"
+>
+  <button
+    type="button"
+    class="barra-acoes__botao"
+    [disabled]="!possuiLotesSelecionados()"
+    (click)="onConfirmar()"
+  >
+    Confirmar
+  </button>
+
+  <button
+    type="button"
+    class="barra-acoes__botao"
+    [disabled]="!possuiLotesSelecionados()"
+    (click)="onEnviar()"
+  >
+    Enviar
+  </button>
+
+  <button
+    type="button"
+    class="barra-acoes__botao barra-acoes__botao--largo"
+    [disabled]="!possuiLotesSelecionados()"
+    (click)="onVisualizarJustificativa()"
+  >
+    Visualizar Justificativa
+  </button>
+
+  <button
+    type="button"
+    class="barra-acoes__botao barra-acoes__botao--destaque"
+    (click)="onIncluir()"
+  >
+    Incluir
+  </button>
+
+  <button
+    type="button"
+    class="barra-acoes__botao"
+    [disabled]="!possuiUmLoteSelecionado()"
+    (click)="onAlterar()"
+  >
+    Alterar
+  </button>
+
+  <button
+    type="button"
+    class="barra-acoes__botao"
+    [disabled]="!possuiUmLoteSelecionado()"
+    (click)="onExcluir()"
+  >
+    Excluir
+  </button>
+
+  <button
+    type="button"
+    class="barra-acoes__botao"
+    [disabled]="!possuiUmLoteSelecionado()"
+    (click)="onVisualizar()"
+  >
+    Visualizar
+  </button>
+</section>
+
+  <app-tabela-lotes
+    [lotes]="lotes()"
+    [paginaAtual]="paginaAtual()"
+    [totalPaginas]="totalPaginas()"
+    (selecaoAlterada)="onSelecaoAlterada($event)"
+    (paginaAlterada)="onPaginaAlterada($event)"
+  />
+</main>

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { PainelFiltrosComponent } from "./features/components/painel-filtros/painel-filtros";
+import { ConsultaLotesComponent } from "./features/pages/consulta-lotes/consulta-lotes";
 
 @Component({
   selector: 'app-root',
-  imports: [ PainelFiltrosComponent],
+  imports: [ConsultaLotesComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
