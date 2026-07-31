@@ -5,7 +5,10 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import {
+  CurrencyPipe,
+  DatePipe,
+} from '@angular/common';
 
 import { Lote } from '../../models/lote.model';
 
@@ -20,49 +23,75 @@ import { Lote } from '../../models/lote.model';
   styleUrl: './tabela-lotes.scss',
 })
 export class TabelaLotesComponent {
-  readonly lotes = input.required<readonly Lote[]>();
+  readonly lotes =
+    input.required<readonly Lote[]>();
 
   readonly paginaAtual = input(1);
-  readonly totalPaginas = input(1);
+  readonly totalRegistros = input(0);
+  readonly tamanhoPagina = input(10);
 
-  readonly selecaoAlterada = output<readonly Lote[]>();
+  readonly selecaoAlterada =
+    output<readonly Lote[]>();
+
   readonly paginaAlterada = output<number>();
 
-  readonly idsSelecionados = signal<Set<number>>(new Set());
+  readonly idsSelecionados =
+    signal<Set<number>>(new Set());
+
+  readonly totalPaginas = computed(() => {
+    const totalRegistros = this.totalRegistros();
+    const tamanhoPagina = this.tamanhoPagina();
+
+    if (totalRegistros === 0 || tamanhoPagina <= 0) {
+      return 1;
+    }
+
+    return Math.ceil(
+      totalRegistros / tamanhoPagina
+    );
+  });
 
   readonly todosSelecionados = computed(() => {
     const lotes = this.lotes();
+    const idsSelecionados = this.idsSelecionados();
 
     return (
       lotes.length > 0 &&
       lotes.every((lote) =>
-        this.idsSelecionados().has(lote.id)
+        idsSelecionados.has(lote.id)
       )
     );
   });
 
-  readonly parcialmenteSelecionados = computed(() => {
-    const lotes = this.lotes();
+  readonly parcialmenteSelecionados =
+    computed(() => {
+      const lotes = this.lotes();
+      const idsSelecionados =
+        this.idsSelecionados();
 
-    const quantidadeSelecionada = lotes.filter((lote) =>
-      this.idsSelecionados().has(lote.id)
-    ).length;
+      const quantidadeSelecionada =
+        lotes.filter((lote) =>
+          idsSelecionados.has(lote.id)
+        ).length;
 
-    return (
-      quantidadeSelecionada > 0 &&
-      quantidadeSelecionada < lotes.length
-    );
-  });
+      return (
+        quantidadeSelecionada > 0 &&
+        quantidadeSelecionada < lotes.length
+      );
+    });
 
   readonly estaNaPrimeiraPagina = computed(
     () => this.paginaAtual() <= 1
   );
 
   readonly estaNaUltimaPagina = computed(
-    () => this.paginaAtual() >= this.totalPaginas()
+    () =>
+      this.paginaAtual() >= this.totalPaginas()
   );
 
-  loteEstaSelecionado(idLote: number): boolean {
+  loteEstaSelecionado(
+    idLote: number
+  ): boolean {
     return this.idsSelecionados().has(idLote);
   }
 
@@ -87,13 +116,13 @@ export class TabelaLotesComponent {
     );
 
     if (this.todosSelecionados()) {
-      for (const lote of this.lotes()) {
+      this.lotes().forEach((lote) => {
         selecionados.delete(lote.id);
-      }
+      });
     } else {
-      for (const lote of this.lotes()) {
+      this.lotes().forEach((lote) => {
         selecionados.add(lote.id);
-      }
+      });
     }
 
     this.idsSelecionados.set(selecionados);
@@ -105,15 +134,21 @@ export class TabelaLotesComponent {
   }
 
   irParaPaginaAnterior(): void {
-    this.irParaPagina(this.paginaAtual() - 1);
+    this.irParaPagina(
+      this.paginaAtual() - 1
+    );
   }
 
   irParaProximaPagina(): void {
-    this.irParaPagina(this.paginaAtual() + 1);
+    this.irParaPagina(
+      this.paginaAtual() + 1
+    );
   }
 
   irParaUltimaPagina(): void {
-    this.irParaPagina(this.totalPaginas());
+    this.irParaPagina(
+      this.totalPaginas()
+    );
   }
 
   irParaPagina(pagina: number): void {
@@ -125,12 +160,19 @@ export class TabelaLotesComponent {
       return;
     }
 
+    this.limparSelecao();
     this.paginaAlterada.emit(pagina);
   }
 
+  limparSelecao(): void {
+    this.idsSelecionados.set(new Set());
+    this.selecaoAlterada.emit([]);
+  }
+
   private emitirSelecao(): void {
-    const selecionados = this.lotes().filter((lote) =>
-      this.idsSelecionados().has(lote.id)
+    const selecionados = this.lotes().filter(
+      (lote) =>
+        this.idsSelecionados().has(lote.id)
     );
 
     this.selecaoAlterada.emit(selecionados);

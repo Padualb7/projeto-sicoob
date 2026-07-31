@@ -12,6 +12,9 @@ import { FiltrosLote } from '../../models/filtros-lote.model';
 import { Lote } from '../../models/lote.model';
 import { LotesService } from '../../services/lotes.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Lancamento } from '../../models/lancamento.model';
+import { ModalInclusaoLancamentoComponent } from "../../components/modal-inclusao-lancamento/modal-inclusao-lancamento";
+import { finalize, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-consulta-lotes',
@@ -19,8 +22,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   imports: [
     PainelFiltrosComponent,
     TabelaLotesComponent,
-    MatProgressSpinnerModule
-  ],
+    MatProgressSpinnerModule,
+    ModalInclusaoLancamentoComponent
+],
   templateUrl: './consulta-lotes.html',
   styleUrl: './consulta-lotes.scss',
 })
@@ -30,6 +34,7 @@ export class ConsultaLotesComponent {
 
   readonly lotes = signal<readonly Lote[]>([]);
   readonly carregando = signal(false);
+  readonly totalRegistros = signal(0);
 
   readonly lotesSelecionados = signal<readonly Lote[]>([]);
 
@@ -44,16 +49,23 @@ export class ConsultaLotesComponent {
     () => this.lotesSelecionados().length > 0
   );
 
-   onPesquisar(filtros: FiltrosLote): void {
+  readonly filtrosAtuais = signal<FiltrosLote | null>(null);
+
+  modalInclusaoAberta = false;
+
+  onPesquisar(filtros: FiltrosLote): void {
+    
     this.carregando.set(true);
     this.lotesSelecionados.set([]);
     this.paginaAtual.set(1);
+    this.filtrosAtuais.set(filtros);
 
     this.lotesService
       .buscarLotes(filtros, 1)
       .subscribe({
         next: (lotes) => {
           this.lotes.set(lotes);
+          this.totalRegistros.set(lotes.length);
         },
         error: (erro) => {
           console.error('Erro ao buscar lotes:', erro);
@@ -112,7 +124,7 @@ export class ConsultaLotesComponent {
   }
 
   onIncluir(): void {
-    console.log('Incluir lançamento');
+    this.abrirModalInclusao();
   }
 
   onAlterar(): void {
@@ -126,14 +138,38 @@ export class ConsultaLotesComponent {
   }
 
   onExcluir(): void {
-    const lote = this.obterLoteSelecionado();
+  const lote = this.obterLoteSelecionado();
+  const filtros = this.filtrosAtuais();
 
-    if (!lote) {
-      return;
-    }
-
-    console.log('Excluir lote:', lote);
+  if (!lote || !filtros) {
+    return;
   }
+
+  this.carregando.set(true);
+
+  this.lotesService
+    .excluirLote(lote.id)
+    .pipe(
+      switchMap(() =>
+        this.lotesService.buscarLotes(
+          filtros,
+          this.paginaAtual()
+        )
+      ),
+      finalize(() => {
+        this.carregando.set(false);
+      })
+    )
+    .subscribe({
+      next: (lotes) => {
+        this.lotes.set(lotes);
+        this.lotesSelecionados.set([]);
+      },
+      error: (erro) => {
+        console.error('Erro ao excluir lote:', erro);
+      },
+    });
+}
 
   onVisualizar(): void {
     const lote = this.obterLoteSelecionado();
@@ -151,5 +187,21 @@ export class ConsultaLotesComponent {
     }
 
     return this.lotesSelecionados()[0];
+  }
+
+  // Funções Modal Lançamento
+
+  abrirModalInclusao(): void {
+    console.log('abriu');
+    
+    this.modalInclusaoAberta = true;
+  }
+
+  fecharModalInclusao(): void {
+    this.modalInclusaoAberta = false;
+  }
+
+  adicionarLancamento(lancamento: Lancamento): void {
+    console.log(lancamento);
   }
 }
