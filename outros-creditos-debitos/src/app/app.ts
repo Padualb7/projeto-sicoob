@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { ConsultaLotesComponent } from "./features/pages/consulta-lotes/consulta-lotes";
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [ConsultaLotesComponent],
+  standalone: true,
+  imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
-export class App {
-  protected title = 'outros-creditos-debitos';
-}
+export class App {}
