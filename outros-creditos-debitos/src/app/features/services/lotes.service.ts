@@ -8,7 +8,7 @@ import { Lote } from '../models/lote.model';
   providedIn: 'root',
 })
 export class LotesService {
-  private readonly lotesMock: readonly Lote[] = [
+  private lotesMock: readonly Lote[] = [
     {
       id: 1,
       dataEntrada: new Date('2026-01-16T00:00:00'),
@@ -41,6 +41,16 @@ export class LotesService {
       delay(3000)
     );
   }
+
+  excluirLote(id: number): Observable<void> {
+  this.lotesMock = this.lotesMock.filter(
+    (lote) => lote.id !== id
+  );
+
+  return of(void 0).pipe(
+    delay(1000)
+  );
+}
 
 private filtrarLotes(
   filtros: FiltrosLote
