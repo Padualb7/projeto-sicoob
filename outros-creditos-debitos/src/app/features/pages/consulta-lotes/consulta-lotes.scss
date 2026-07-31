@@ -1,71 +1,112 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #eef1f3;
+}
+
+.consulta-lotes {
+  min-height: 100vh;
+}
+
+
+.cabecalho-pagina {
+  min-height: 58px;
+  padding: 10px 16px;
+
+  background: #ffffff;
+  border-bottom: 1px solid #d8dcde;
+
+  box-shadow: 0 2px 5px rgb(0 0 0 / 8%);
+}
+
+.cabecalho-pagina__titulo {
+  margin: 0 0 4px;
+
+  color: var(--cor-primaria);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+.breadcrumb__link {
+  color: var(--cor-secundaria);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.breadcrumb__link:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb__link:focus-visible {
+  outline: 2px solid var(--cor-secundaria);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.breadcrumb__separador {
+  color: #9aa2a5;
+}
+
+.breadcrumb__atual {
+  color: var(--cor-primaria);
+  font-weight: 500;
+}
+
+.consulta-lotes__conteudo {
+  min-height: calc(100vh - 82px);
+
+  margin: 14px;
+  padding: 34px;
+
+  background: #ffffff;
+
+  border: 1px solid #d3d8db;
+  border-radius: 10px;
+
+  box-shadow:
+    0 1px 3px rgb(0 0 0 / 8%),
+    0 6px 14px rgb(0 0 0 / 5%);
+}
+
+.consulta-lotes__conteudo app-painel-filtros,
+.consulta-lotes__conteudo .barra-acoes,
+.consulta-lotes__conteudo app-tabela-lotes {
+  display: block;
+}
+
+.consulta-lotes__conteudo app-painel-filtros {
+  margin-bottom: 10px;
+}
+
+.consulta-lotes__conteudo .barra-acoes {
+  margin-bottom: 10px;
+}
+
+
 .barra-acoes {
   display: flex;
   align-items: center;
   gap: 4px;
 
   width: 100%;
-  min-height: 34px;
+  min-height: 36px;
   padding: 4px;
 
-  background: #f1f3f6;
+  background: #eef0f4;
+
   border-radius: 3px;
 
   overflow-x: auto;
-}
-
-.barra-acoes__botao {
-  min-width: 76px;
-  height: 26px;
-  padding: 0 14px;
-
-  border: 1px solid #aeb4ba;
-  border-radius: 3px;
-
-  background: #f8f8f8;
-  color: var(--cor-primaria);
-
-  font-family: inherit;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  white-space: nowrap;
-
-  cursor: pointer;
-
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    opacity 0.15s ease;
-}
-
-.barra-acoes__botao:hover:not(:disabled) {
-  background: #e8ebed;
-  border-color: #90979d;
-}
-
-.barra-acoes__botao:active:not(:disabled) {
-  background: #dfe3e6;
-}
-
-.barra-acoes__botao--largo {
-  min-width: 134px;
-}
-
-.barra-acoes__botao--destaque {
-  background: var(--cor-secundaria);
-  border-color: var(--cor-secundaria);
-  color: var(--cor-primaria);
-}
-
-.barra-acoes__botao--destaque:hover:not(:disabled) {
-  filter: brightness(0.95);
-  background: var(--cor-secundaria);
-  border-color: var(--cor-secundaria);
-}
-
-.barra-acoes__botao:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
 }
 
 .loading-overlay {
@@ -77,7 +118,7 @@
   align-items: center;
   justify-content: center;
 
-  background-color: rgb(255 255 255 / 70%);
+  background: rgb(255 255 255 / 70%);
   backdrop-filter: blur(1px);
 
   cursor: wait;
@@ -98,12 +139,22 @@
   --mat-progress-spinner-active-indicator-color:
     var(--cor-secundaria);
 }
+
 @media (max-width: 768px) {
+  .consulta-lotes__conteudo {
+    min-height: calc(100vh - 74px);
+
+    margin: 8px;
+    padding: 18px 12px;
+
+    border-radius: 7px;
+  }
+
   .barra-acoes {
     justify-content: flex-start;
   }
 
-  .barra-acoes__botao {
+  .barra-acoes button {
     flex: 0 0 auto;
   }
 }

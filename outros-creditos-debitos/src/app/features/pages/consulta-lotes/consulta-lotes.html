@@ -4,113 +4,140 @@
     class="loading-overlay"
     role="status"
     aria-live="polite"
-    aria-label="Carregando dados"
+    aria-busy="true"
   >
     <div class="loading-overlay__conteudo">
       <mat-spinner
         [diameter]="48"
         [strokeWidth]="4"
+        aria-hidden="true"
       />
 
       <span>Carregando...</span>
     </div>
   </div>
 }
+
 <main class="consulta-lotes">
-  <header class="consulta-lotes__cabecalho">
+  <header class="cabecalho-pagina">
+    <h1 class="cabecalho-pagina__titulo">
+      Outros Créditos/Débitos
+    </h1>
+
     <nav
       class="breadcrumb"
       aria-label="Navegação estrutural"
     >
-      <a href="/">Início</a>
+      <a
+        class="breadcrumb__link"
+        routerLink="/"
+      >
+        Início
+      </a>
 
-      <span aria-hidden="true">›</span>
+      <span
+        class="breadcrumb__separador"
+        aria-hidden="true"
+      >
+        ›
+      </span>
 
-      <span aria-current="page">
+      <span
+        class="breadcrumb__atual"
+        aria-current="page"
+      >
         Outros Créditos/Débitos
       </span>
     </nav>
-
-    <h1>Outros Créditos/Débitos</h1>
   </header>
 
-  <app-painel-filtros
-    (pesquisar)="onPesquisar($event)"
-    (limpar)="onLimparFiltros()"
-  />
+  <section class="consulta-lotes__conteudo">
+    <app-painel-filtros
+      (pesquisar)="onPesquisar($event)"
+      (limpar)="onLimparFiltros()"
+    />
 
-  <section
-  class="barra-acoes"
-  aria-label="Ações dos lotes"
->
-  <button
-    type="button"
-    class="barra-acoes__botao"
-    [disabled]="!possuiLotesSelecionados()"
-    (click)="onConfirmar()"
-  >
-    Confirmar
-  </button>
+    <section
+      class="barra-acoes"
+      aria-label="Ações dos lotes"
+    >
+      <button
+        type="button"
+        class="btn"
+        [disabled]="!possuiLotesSelecionados()"
+        (click)="onConfirmar()"
+      >
+        Confirmar
+      </button>
 
-  <button
-    type="button"
-    class="barra-acoes__botao"
-    [disabled]="!possuiLotesSelecionados()"
-    (click)="onEnviar()"
-  >
-    Enviar
-  </button>
+      <button
+        type="button"
+        class="btn"
+        [disabled]="!possuiLotesSelecionados()"
+        (click)="onEnviar()"
+      >
+        Enviar
+      </button>
 
-  <button
-    type="button"
-    class="barra-acoes__botao barra-acoes__botao--largo"
-    [disabled]="!possuiLotesSelecionados()"
-    (click)="onVisualizarJustificativa()"
-  >
-    Visualizar Justificativa
-  </button>
+      <button
+        type="button"
+        class="btn btn-wide"
+        [disabled]="!possuiLotesSelecionados()"
+        (click)="onVisualizarJustificativa()"
+      >
+        Visualizar Justificativa
+      </button>
 
-  <button
-    type="button"
-    class="barra-acoes__botao barra-acoes__botao--destaque"
-    (click)="onIncluir()"
-  >
-    Incluir
-  </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="onIncluir()"
+      >
+        Incluir
+      </button>
 
-  <button
-    type="button"
-    class="barra-acoes__botao"
-    [disabled]="!possuiUmLoteSelecionado()"
-    (click)="onAlterar()"
-  >
-    Alterar
-  </button>
+      <button
+        type="button"
+        class="btn btn-secondary"
+        [disabled]="!possuiUmLoteSelecionado()"
+        (click)="onAlterar()"
+      >
+        Alterar
+      </button>
 
-  <button
-    type="button"
-    class="barra-acoes__botao"
-    [disabled]="!possuiUmLoteSelecionado()"
-    (click)="onExcluir()"
-  >
-    Excluir
-  </button>
+      <button
+        type="button"
+        class="btn"
+        [disabled]="!possuiUmLoteSelecionado()"
+        (click)="onExcluir()"
+      >
+        Excluir
+      </button>
 
-  <button
-    type="button"
-    class="barra-acoes__botao"
-    [disabled]="!possuiUmLoteSelecionado()"
-    (click)="onVisualizar()"
-  >
-    Visualizar
-  </button>
-</section>
+      <button
+        type="button"
+        class="btn"
+        [disabled]="!possuiUmLoteSelecionado()"
+        (click)="onVisualizar()"
+      >
+        Visualizar
+      </button>
+    </section>
 
-  <app-tabela-lotes
-    [lotes]="lotes()"
-    [paginaAtual]="paginaAtual()"
-    [totalPaginas]="totalPaginas()"
-    (selecaoAlterada)="onSelecaoAlterada($event)"
-    (paginaAlterada)="onPaginaAlterada($event)"
-  />
+   <app-tabela-lotes
+  [lotes]="lotes()"
+  [paginaAtual]="paginaAtual()"
+  [totalRegistros]="totalRegistros()"
+  [tamanhoPagina]="10"
+  (selecaoAlterada)="onSelecaoAlterada($event)"
+  (paginaAlterada)="onPaginaAlterada($event)"
+/>
+  </section>
 </main>
+
+<!-- Modal Inclusão -->
+<app-modal-inclusao-lancamento
+  [aberto]="modalInclusaoAberta"
+  (fechar)="fecharModalInclusao()"
+  (lancamentoIncluido)="adicionarLancamento($event)"
+/>
