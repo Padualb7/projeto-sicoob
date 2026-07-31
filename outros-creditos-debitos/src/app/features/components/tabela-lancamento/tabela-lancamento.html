@@ -1,0 +1,102 @@
+<section class="tabela-lancamentos">
+  <div class="tabela-lancamentos__conteudo">
+    <table>
+      <thead>
+        <tr>
+          <th class="coluna-selecao">
+            Seleção
+          </th>
+
+          <th>Conta Corrente</th>
+          <th>Titular</th>
+          <th>Valor</th>
+          <th>Histórico</th>
+          <th>Documento</th>
+          <th>Estorno</th>
+          <th>Situação</th>
+          <th>PA</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (
+          lancamento of lancamentos();
+          track lancamento.id
+        ) {
+          <tr
+            [class.linha-selecionada]="
+              estaSelecionado(lancamento)
+            "
+            (click)="selecionarLancamento(lancamento)"
+          >
+            <td class="coluna-selecao">
+              <input
+                type="radio"
+                name="lancamentoSelecionado"
+                [attr.aria-label]="
+                  'Selecionar lançamento ' +
+                  lancamento.id
+                "
+                [checked]="
+                  estaSelecionado(lancamento)
+                "
+                (click)="$event.stopPropagation()"
+                (change)="
+                  selecionarLancamento(lancamento)
+                "
+              />
+            </td>
+
+            <td>
+              {{ lancamento.contaCorrente }}
+            </td>
+
+            <td>
+              {{ lancamento.titular }}
+            </td>
+
+            <td>
+              {{
+                lancamento.valor
+                  | currency:
+                    'BRL':
+                    'symbol':
+                    '1.2-2':
+                    'pt-BR'
+              }}
+            </td>
+
+            <td>
+              {{ lancamento.historico }}
+            </td>
+
+            <td>
+              {{ lancamento.documento }}
+            </td>
+
+            <td>
+              {{ lancamento.estorno ? 'Sim' : 'Não' }}
+            </td>
+
+            <td>
+              {{ lancamento.situacao }}
+            </td>
+
+            <td>
+              {{ lancamento.pa || '-' }}
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td
+              class="tabela-lancamentos__vazia"
+              colspan="9"
+            >
+              Nenhum lançamento incluído.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
