@@ -208,3 +208,4 @@ Validadores personalizados utilizados pelos formulários reativos.
 **Lucas de Pádua Bergamaschi**
 
 GitHub: https://github.com/Padualb
+Linkedin: https://www.linkedin.com/in/lucas-de-padua/
