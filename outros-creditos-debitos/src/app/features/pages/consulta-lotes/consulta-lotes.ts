@@ -12,7 +12,6 @@ import { FiltrosLote } from '../../models/filtros-lote.model';
 import { Lote } from '../../models/lote.model';
 import { LotesService } from '../../services/lotes.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Lancamento } from '../../models/lancamento.model';
 import { ModalInclusaoLancamentoComponent } from "../../components/modal-inclusao-lancamento/modal-inclusao-lancamento";
 import { finalize, switchMap } from 'rxjs';
 
@@ -93,46 +92,14 @@ export class ConsultaLotesComponent {
   onPaginaAlterada(pagina: number): void {
     this.paginaAtual.set(pagina);
     this.lotesSelecionados.set([]);
-
-    console.log('Página selecionada:', pagina);
-
-    // Posteriormente:
-    // this.buscarLotes(this.filtrosAtuais(), pagina);
   }
 
-  onConfirmar(): void {
-    console.log(
-      'Confirmar lotes:',
-      this.lotesSelecionados()
-    );
-  }
+  
 
-  onEnviar(): void {
-    console.log(
-      'Enviar lotes:',
-      this.lotesSelecionados()
-    );
-  }
-
-  onVisualizarJustificativa(): void {
-    console.log(
-      'Visualizar justificativa:',
-      this.lotesSelecionados()
-    );
-  }
+  
 
   onIncluir(): void {
     this.abrirModalInclusao();
-  }
-
-  onAlterar(): void {
-    const lote = this.obterLoteSelecionado();
-
-    if (!lote) {
-      return;
-    }
-
-    console.log('Alterar lote:', lote);
   }
 
   onExcluir(): void {
@@ -175,8 +142,6 @@ export class ConsultaLotesComponent {
     if (!lote) {
       return;
     }
-
-    console.log('Visualizar lote:', lote);
   }
 
   private obterLoteSelecionado(): Lote | null {
@@ -190,16 +155,10 @@ export class ConsultaLotesComponent {
   // Funções Modal Lançamento
 
   abrirModalInclusao(): void {
-    console.log('abriu');
-
     this.modalInclusaoAberta = true;
   }
 
   fecharModalInclusao(): void {
     this.modalInclusaoAberta = false;
-  }
-
-  adicionarLancamento(lancamento: Lancamento): void {
-    console.log(lancamento);
   }
 }

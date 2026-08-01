@@ -65,7 +65,6 @@
         type="button"
         class="btn"
         [disabled]="!possuiLotesSelecionados()"
-        (click)="onConfirmar()"
       >
         Confirmar
       </button>
@@ -74,7 +73,6 @@
         type="button"
         class="btn"
         [disabled]="!possuiLotesSelecionados()"
-        (click)="onEnviar()"
       >
         Enviar
       </button>
@@ -83,7 +81,6 @@
         type="button"
         class="btn btn-wide"
         [disabled]="!possuiLotesSelecionados()"
-        (click)="onVisualizarJustificativa()"
       >
         Visualizar Justificativa
       </button>
@@ -100,7 +97,6 @@
         type="button"
         class="btn btn-secondary"
         [disabled]="!possuiUmLoteSelecionado()"
-        (click)="onAlterar()"
       >
         Alterar
       </button>
@@ -139,5 +135,4 @@
 <app-modal-inclusao-lancamento
   [aberto]="modalInclusaoAberta"
   (fechar)="fecharModalInclusao()"
-  (lancamentoIncluido)="adicionarLancamento($event)"
 />
