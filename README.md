@@ -1,59 +1,210 @@
-# OutrosCreditosDebitos
+# Outros Créditos/Débitos
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.0.
+Aplicação desenvolvida como solução para um desafio técnico utilizando **Angular 20**. O sistema permite consultar lotes de outros créditos/débitos, aplicar filtros e gerenciar lançamentos através de uma interface moderna e responsiva, utilizando dados mockados em memória para simular operações de backend.
 
-## Development server
+---
 
-To start a local development server, run:
+# 📷 Prévia da aplicação
+
+## Tela principal
+
+![Tela principal](docs/images/tela-principal.png)
+
+---
+
+## Modal de inclusão
+
+![Modal inclusão](docs/images/modal-inclusao.png)
+
+---
+---
+
+# 📋 Funcionalidades
+
+## Consulta de Lotes
+
+- Pesquisa de lotes utilizando filtros.
+- Limpeza dos filtros.
+- Paginação dos resultados.
+- Seleção individual e múltipla de lotes.
+- Exclusão de lotes.
+- Indicador de carregamento durante operações simuladas.
+
+## Lançamentos
+
+- Inclusão de lançamentos.
+- Visualização de lançamentos.
+- Alteração de lançamentos.
+- Exclusão de lançamentos.
+- Duplicação de lançamentos.
+- Busca de conta corrente através de mock.
+- Exibição do titular da conta encontrada.
+- Validações reativas em todos os campos obrigatórios.
+- Lançamentos armazenados em memória conforme especificação do desafio.
+
+---
+
+# 🚀 Tecnologias
+
+- Angular 20
+- TypeScript
+- Angular Material
+- RxJS
+- Angular Signals
+- Reactive Forms
+- SCSS
+- Jasmine
+- Karma
+- Docker
+
+---
+
+# 📦 Instalação
+
+## Pré-requisitos
+
+- Node.js 22+
+- npm
+- Docker Desktop (opcional)
+
+---
+
+## Executando sem Docker
+
+Clone o repositório:
 
 ```bash
-ng serve
+git clone https://github.com/Padualb/projeto-sicoob.git
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Acesse a pasta do projeto:
 
 ```bash
-ng generate component component-name
+cd projeto-sicoob
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Instale as dependências:
 
 ```bash
-ng generate --help
+npm install
 ```
 
-## Building
-
-To build the project run:
+Execute a aplicação:
 
 ```bash
-ng build
+npm start
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+A aplicação estará disponível em:
 
-## Running unit tests
+```
+http://localhost:4200
+```
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+---
+
+## Executando com Docker
+
+### Pré-requisitos
+
+- Docker Desktop instalado.
+- Docker Desktop em execução.
+Clone o repositório:
 
 ```bash
-ng test
+git clone https://github.com/Padualb/projeto-sicoob.git
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+Acesse a pasta do projeto:
 
 ```bash
-ng e2e
+cd projeto-sicoob
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Execute:
 
-## Additional Resources
+```bash
+docker compose up --build
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+A aplicação estará disponível em:
+
+```
+http://localhost:4000
+```
+
+Para encerrar a aplicação:
+
+```bash
+docker compose down
+```
+
+---
+
+# 🧪 Testes
+
+Para executar os testes unitários:
+
+```bash
+npm test
+```
+
+---
+
+# 🏗️ Arquitetura
+
+O projeto foi desenvolvido seguindo boas práticas do ecossistema Angular.
+
+### Principais decisões técnicas
+
+- Utilização de **Standalone Components**.
+- Gerenciamento de estado local utilizando **Angular Signals**.
+- Formulários desenvolvidos com **Reactive Forms**.
+- Componentização visando reutilização e separação de responsabilidades.
+- Simulação de chamadas HTTP utilizando **RxJS** e dados mockados.
+- Estrutura preparada para futura integração com uma API REST.
+
+---
+
+# 📁 Estrutura do Projeto
+
+```text
+src/
+└── app
+    ├── features
+    │   ├── components
+    │   ├── models
+    │   ├── pages
+    │   └── services
+    └── shared
+        └── validators
+```
+
+### Organização
+
+**components**
+
+Componentes reutilizáveis da aplicação, como tabelas, filtros e modais.
+
+**models**
+
+Interfaces e modelos utilizados durante a aplicação.
+
+**pages**
+
+Componentes responsáveis pelas telas da aplicação.
+
+**services**
+
+Camada responsável pelas regras de negócio e pela simulação das chamadas ao backend.
+
+**validators**
+
+Validadores personalizados utilizados pelos formulários reativos.
+
+
+# 👨‍💻 Autor
+
+**Lucas de Pádua Bergamaschi**
+
+GitHub: https://github.com/Padualb
