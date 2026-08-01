@@ -1,0 +1,18 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    image: outros-creditos-debitos:1.0.0
+
+    container_name: outros-creditos-debitos
+
+    ports:
+      - "4000:4000"
+
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+
+    restart: unless-stopped
