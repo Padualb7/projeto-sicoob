@@ -24,7 +24,7 @@ import { finalize, switchMap } from 'rxjs';
     TabelaLotesComponent,
     MatProgressSpinnerModule,
     ModalInclusaoLancamentoComponent
-],
+  ],
   templateUrl: './consulta-lotes.html',
   styleUrl: './consulta-lotes.scss',
 })
@@ -54,7 +54,7 @@ export class ConsultaLotesComponent {
   modalInclusaoAberta = false;
 
   onPesquisar(filtros: FiltrosLote): void {
-    
+
     this.carregando.set(true);
     this.lotesSelecionados.set([]);
     this.paginaAtual.set(1);
@@ -77,13 +77,11 @@ export class ConsultaLotesComponent {
   }
 
   onLimparFiltros(): void {
-    this.paginaAtual.set(1);
+    this.lotes.set([]);
     this.lotesSelecionados.set([]);
-
-    console.log('Filtros limpos');
-
-    // Posteriormente:
-    // this.buscarLotes({}, 1);
+    this.paginaAtual.set(1);
+    this.totalRegistros.set(0);
+    this.filtrosAtuais.set(null);
   }
 
   onSelecaoAlterada(
@@ -138,38 +136,38 @@ export class ConsultaLotesComponent {
   }
 
   onExcluir(): void {
-  const lote = this.obterLoteSelecionado();
-  const filtros = this.filtrosAtuais();
+    const lote = this.obterLoteSelecionado();
+    const filtros = this.filtrosAtuais();
 
-  if (!lote || !filtros) {
-    return;
+    if (!lote || !filtros) {
+      return;
+    }
+
+    this.carregando.set(true);
+
+    this.lotesService
+      .excluirLote(lote.id)
+      .pipe(
+        switchMap(() =>
+          this.lotesService.buscarLotes(
+            filtros,
+            this.paginaAtual()
+          )
+        ),
+        finalize(() => {
+          this.carregando.set(false);
+        })
+      )
+      .subscribe({
+        next: (lotes) => {
+          this.lotes.set(lotes);
+          this.lotesSelecionados.set([]);
+        },
+        error: (erro) => {
+          console.error('Erro ao excluir lote:', erro);
+        },
+      });
   }
-
-  this.carregando.set(true);
-
-  this.lotesService
-    .excluirLote(lote.id)
-    .pipe(
-      switchMap(() =>
-        this.lotesService.buscarLotes(
-          filtros,
-          this.paginaAtual()
-        )
-      ),
-      finalize(() => {
-        this.carregando.set(false);
-      })
-    )
-    .subscribe({
-      next: (lotes) => {
-        this.lotes.set(lotes);
-        this.lotesSelecionados.set([]);
-      },
-      error: (erro) => {
-        console.error('Erro ao excluir lote:', erro);
-      },
-    });
-}
 
   onVisualizar(): void {
     const lote = this.obterLoteSelecionado();
@@ -193,7 +191,7 @@ export class ConsultaLotesComponent {
 
   abrirModalInclusao(): void {
     console.log('abriu');
-    
+
     this.modalInclusaoAberta = true;
   }
 

@@ -1,314 +1,260 @@
 @if (aberto()) {
-  <div
-    class="modal-overlay"
-    (click)="fecharModal()"
-  >
-    <section
-      class="modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="titulo-modal"
-      (click)="$event.stopPropagation()"
-    >
-      <header class="modal__cabecalho">
-        <h2 id="titulo-modal">
-          Incluir lançamento
-        </h2>
+<div class="modal-overlay" (click)="fecharModal()">
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="titulo-modal"
+    (click)="$event.stopPropagation()">
+    <header class="modal__cabecalho">
+      <h2 id="titulo-modal">
+        Incluir lançamento
+      </h2>
 
-        <button
-          type="button"
-          class="botao-fechar"
-          aria-label="Fechar modal"
-          (click)="fecharModal()"
-        >
-          ×
+      <button type="button" class="botao-fechar" aria-label="Fechar modal" [disabled]="carregando()"
+        (click)="fecharModal()">
+        ×
+      </button>
+    </header>
+
+    <form [formGroup]="formulario" (ngSubmit)="confirmarInclusao()">
+      <fieldset>
+        <legend>Conta Corrente</legend>
+
+        <div class="linha-formulario">
+          <label for="contaCorrente">
+            Conta Corrente
+            <span class="campo__asterisco">*</span>
+          </label>
+
+          <div class="campo-conteudo campo-conteudo--conta">
+            <div class="campo-busca">
+              <input id="contaCorrente" class="campo__controle campo__controle--conta" type="text"
+                formControlName="contaCorrente" />
+
+              <button type="button" class="botao-busca" aria-label="Buscar conta corrente"
+                [disabled]="visualizando() || carregando()" (click)="buscarConta()">
+                🔍
+              </button>
+
+              @if (titularEncontrado) {
+              <span class="titular">
+                {{ titularEncontrado }}
+              </span>
+              }
+            </div>
+
+            @if (
+            formulario.controls.contaCorrente.touched &&
+            formulario.controls.contaCorrente.hasError('required')
+            ) {
+            <small class="campo__erro">
+              Informe a conta corrente.
+            </small>
+            }
+
+            @if (
+            formulario.controls.contaCorrente.touched &&
+            formulario.controls.contaCorrente.hasError('contaNaoEncontrada')
+            ) {
+            <small class="campo__erro">
+              Conta corrente não encontrada no sistema.
+            </small>
+            }
+          </div>
+        </div>
+
+        <div class="linha-formulario">
+          <label for="valor">
+            Valor
+            <span class="campo__asterisco">*</span>
+          </label>
+
+          <div class="campo-conteudo">
+            <input id="valor" class="campo__controle campo__controle--valor" type="number" min="0" step="0.01"
+              formControlName="valor" />
+
+            @if (
+            formulario.controls.valor.touched &&
+            formulario.controls.valor.hasError('required')
+            ) {
+            <small class="campo__erro">
+              Informe o valor.
+            </small>
+            }
+
+            @if (
+            formulario.controls.valor.touched &&
+            formulario.controls.valor.hasError('min')
+            ) {
+            <small class="campo__erro">
+              Informe um valor maior que zero.
+            </small>
+            }
+          </div>
+        </div>
+
+        <div class="linha-formulario">
+          <label for="historico">
+            Histórico
+            <span class="campo__asterisco">*</span>
+          </label>
+
+          <div class="campo-conteudo">
+            <select id="historico" class="campo__controle campo__controle--select" formControlName="historico">
+              <option value="">Selecione</option>
+
+              <option value="Lançamento Manual">
+                Lançamento Manual
+              </option>
+            </select>
+
+            @if (
+            formulario.controls.historico.touched &&
+            formulario.controls.historico.hasError('required')
+            ) {
+            <small class="campo__erro">
+              Campo obrigatório.
+            </small>
+            }
+          </div>
+        </div>
+
+        <div class="linha-formulario">
+          <span class="label-vazio" aria-hidden="true"></span>
+
+          <div class="campo-conteudo">
+            <label class="checkbox">
+              <input type="checkbox" formControlName="estorno" />
+
+              <span>Estorno</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="linha-formulario">
+          <label for="documento">
+            Documento
+            <span class="campo__asterisco">*</span>
+          </label>
+
+          <div class="campo-conteudo">
+            <input id="documento" class="campo__controle" type="text" formControlName="documento" />
+
+            @if (
+            formulario.controls.documento.touched &&
+            formulario.controls.documento.hasError('required')
+            ) {
+            <small class="campo__erro">
+              Campo obrigatório.
+            </small>
+            }
+          </div>
+        </div>
+
+        <div class="linha-formulario linha-formulario--topo">
+          <label for="descricao">
+            Descrição
+          </label>
+
+          <div class="campo-conteudo">
+            <textarea id="descricao" class="campo__controle campo__controle--textarea" rows="4"
+              formControlName="descricao"></textarea>
+          </div>
+        </div>
+
+        <div class="linha-formulario">
+          <label for="situacao">
+            Situação
+          </label>
+
+          <div class="campo-conteudo">
+            <input id="situacao" class="campo__controle campo__controle--situacao" type="text"
+              formControlName="situacao" readonly />
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Documento CSC</legend>
+
+        <div class="linha-formulario">
+          <label for="pa">
+            PA
+          </label>
+
+          <div class="campo-conteudo">
+            <select id="pa" class="campo__controle campo__controle--pa" formControlName="pa">
+              <option value="">Selecione</option>
+              <option value="001">001</option>
+              <option value="002">002</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <section class="secao-lancamentos">
+        <h3 class="secao-lancamentos__titulo">
+          Lançamentos do lote
+        </h3>
+
+        <app-tabela-lancamentos [lancamentos]="lancamentos()" [lancamentoSelecionado]="lancamentoSelecionado()"
+          (selecaoAlterada)="selecionarLancamento($event)" />
+      </section>
+
+      <footer class="modal__acoes">
+        @if (!visualizando() && !editando()) {
+        <button type="button" class="btn btn-secondary" [disabled]="!possuiLancamentoSelecionado()"
+          (click)="visualizarLancamento()">
+          Visualizar
         </button>
-      </header>
 
-      <form
-        [formGroup]="formulario"
-        (ngSubmit)="confirmarInclusao()"
-      >
-        <fieldset>
-          <legend>Conta Corrente</legend>
+        <button type="button" class="btn btn-secondary" [disabled]="!possuiLancamentoSelecionado()"
+          (click)="alterarLancamento()">
+          Alterar
+        </button>
 
-          <div class="linha-formulario">
-            <label for="contaCorrente">
-              Conta Corrente
-            </label>
+        <button type="button" class="btn btn-secondary" [disabled]="!possuiLancamentoSelecionado()"
+          (click)="excluirLancamento()">
+          Excluir
+        </button>
 
-            <div class="campo-conteudo campo-conteudo--conta">
-              <div class="campo-busca">
-                <input
-                  id="contaCorrente"
-                  class="campo__controle campo__controle--conta"
-                  type="text"
-                  formControlName="contaCorrente"
-                />
+        <button type="button" class="btn btn-secondary" [disabled]="!possuiLancamentoSelecionado()"
+          (click)="duplicarLancamento()">
+          Duplicar
+        </button>
 
-                <button
-                  type="button"
-                  class="botao-busca"
-                  aria-label="Buscar conta corrente"
-                  (click)="buscarConta()"
-                >
-                  🔍
-                </button>
+        <button type="submit" class="btn btn-primary" [disabled]="carregando()">
+          Incluir
+        </button>
+        }
 
-                @if (titularEncontrado) {
-                  <span class="titular">
-                    {{ titularEncontrado }}
-                  </span>
-                }
-              </div>
+        @if (editando()) {
+        <button type="button" class="btn btn-primary" (click)="salvarAlteracao()">
+          Salvar alteração
+        </button>
 
-              @if (
-                formulario.controls.contaCorrente.touched &&
-                formulario.controls.contaCorrente.hasError('required')
-              ) {
-                <small class="campo__erro">
-                  Informe a conta corrente.
-                </small>
-              }
+        <button type="button" class="btn btn-secondary" (click)="cancelarEdicao()">
+          Cancelar edição
+        </button>
+        }
 
-              @if (
-                formulario.controls.contaCorrente.touched &&
-                formulario.controls.contaCorrente.hasError('contaNaoEncontrada')
-              ) {
-                <small class="campo__erro">
-                  Conta corrente não encontrada no sistema.
-                </small>
-              }
-            </div>
-          </div>
+        @if (visualizando()) {
+        <button type="button" class="btn btn-secondary" (click)="sairDaVisualizacao()">
+          Voltar
+        </button>
+        }
 
-          <div class="linha-formulario">
-            <label for="valor">
-              Valor
-              <span class="campo__asterisco">*</span>
-            </label>
+        <button type="button" class="btn btn-secondary" (click)="fecharModal()">
+          Fechar
+        </button>
+      </footer>
+    </form>
+  </section>
+  @if (carregando()) {
+  <div class="modal-loading" role="status" aria-live="polite" aria-label="Processando solicitação">
+    <div class="modal-loading__conteudo">
+      <mat-spinner [diameter]="44" [strokeWidth]="4" />
 
-            <div class="campo-conteudo">
-              <input
-                id="valor"
-                class="campo__controle campo__controle--valor"
-                type="number"
-                min="0"
-                step="0.01"
-                formControlName="valor"
-              />
-
-              @if (
-                formulario.controls.valor.touched &&
-                formulario.controls.valor.hasError('required')
-              ) {
-                <small class="campo__erro">
-                  Informe o valor.
-                </small>
-              }
-
-              @if (
-                formulario.controls.valor.touched &&
-                formulario.controls.valor.hasError('min')
-              ) {
-                <small class="campo__erro">
-                  Informe um valor maior que zero.
-                </small>
-              }
-            </div>
-          </div>
-
-          <div class="linha-formulario">
-            <label for="historico">
-              Histórico
-              <span class="campo__asterisco">*</span>
-            </label>
-
-            <div class="campo-conteudo">
-              <select
-                id="historico"
-                class="campo__controle campo__controle--select"
-                formControlName="historico"
-              >
-                <option value="">
-                  Selecione
-                </option>
-
-                <option value="Lançamento Manual">
-                  Lançamento Manual
-                </option>
-              </select>
-
-              @if (
-                formulario.controls.historico.touched &&
-                formulario.controls.historico.hasError('required')
-              ) {
-                <small class="campo__erro">
-                  Campo obrigatório.
-                </small>
-              }
-            </div>
-          </div>
-
-          <div class="linha-formulario">
-            <span class="label-vazio" aria-hidden="true"></span>
-
-            <div class="campo-conteudo">
-              <label class="checkbox">
-                <input
-                  type="checkbox"
-                  formControlName="estorno"
-                />
-
-                <span>Estorno</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="linha-formulario">
-            <label for="documento">
-              Documento
-              <span class="campo__asterisco">*</span>
-            </label>
-
-            <div class="campo-conteudo">
-              <input
-                id="documento"
-                class="campo__controle"
-                type="text"
-                formControlName="documento"
-              />
-
-              @if (
-                formulario.controls.documento.touched &&
-                formulario.controls.documento.hasError('required')
-              ) {
-                <small class="campo__erro">
-                  Campo obrigatório.
-                </small>
-              }
-            </div>
-          </div>
-
-          <div class="linha-formulario linha-formulario--topo">
-            <label for="descricao">
-              Descrição
-            </label>
-
-            <div class="campo-conteudo">
-              <textarea
-                id="descricao"
-                class="campo__controle campo__controle--textarea"
-                rows="4"
-                formControlName="descricao"
-              ></textarea>
-            </div>
-          </div>
-
-          <div class="linha-formulario">
-            <label for="situacao">
-              Situação
-            </label>
-
-            <div class="campo-conteudo">
-              <input
-                id="situacao"
-                class="campo__controle campo__controle--situacao"
-                type="text"
-                formControlName="situacao"
-                readonly
-              />
-            </div>
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend>Documento CSC</legend>
-
-          <div class="linha-formulario">
-            <label for="pa">
-              PA
-            </label>
-
-            <div class="campo-conteudo">
-              <select
-                id="pa"
-                class="campo__controle campo__controle--pa"
-                formControlName="pa"
-              >
-                <option value="">
-                  Selecione
-                </option>
-
-                <option value="001">
-                  001
-                </option>
-
-                <option value="002">
-                  002
-                </option>
-              </select>
-            </div>
-          </div>
-        </fieldset>
-
-       <section class="secao-lancamentos">
-  <h3 class="secao-lancamentos__titulo">
-    Lançamentos do lote
-  </h3>
-
-  <app-tabela-lancamentos
-    [lancamentos]="lancamentos()"
-    [lancamentoSelecionado]="lancamentoSelecionado()"
-    (selecaoAlterada)="selecionarLancamento($event)"
-  />
-</section>
-
-        <footer class="modal__acoes">
-          <button
-            type="button"
-            class="btn btn-secondary"
-          >
-            Visualizar
-          </button>
-
-          <button
-            type="button"
-            class="btn btn-secondary"
-          >
-            Alterar
-          </button>
-
-          <button
-            type="button"
-            class="btn btn-secondary"
-          >
-            Excluir
-          </button>
-
-          <button
-            type="button"
-            class="btn btn-secondary"
-          >
-            Duplicar
-          </button>
-
-          <button
-            type="submit"
-            class="btn btn-primary"
-          >
-            Incluir
-          </button>
-
-          <button
-            type="button"
-            class="btn btn-secondary"
-            (click)="fecharModal()"
-          >
-            Cancelar
-          </button>
-        </footer>
-      </form>
-    </section>
+      <span>Processando...</span>
+    </div>
   </div>
+  }
+</div>
 }
