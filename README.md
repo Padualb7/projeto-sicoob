@@ -8,13 +8,13 @@ Aplicação desenvolvida como solução para um desafio técnico utilizando **An
 
 ## Tela principal
 
-![Tela principal](docs/images/tela-principal.png)
+![Tela principal](docs/images/Tela-principal.png)
 
 ---
 
 ## Modal de inclusão
 
-![Modal inclusão](docs/images/modal-inclusao.png)
+![Modal inclusão](docs/images/Modal-inclusao.png)
 
 ---
 ---
